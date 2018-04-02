@@ -42,7 +42,7 @@
                 <EditText
                     android:id="@+id/email"
                     android:layout_width="fill_parent"
-
+                    android:text="fahadikram046@gmail.com"
                     android:layout_height="wrap_content"
                     android:drawableTint="#000"
                     android:hint="Email"
@@ -61,6 +61,7 @@
                     android:layout_marginTop="16dp"
                     android:drawableTint="#000"
                     android:hint="Password"
+                    android:text="123456"
                     android:inputType="textPassword"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>

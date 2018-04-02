@@ -1,5 +1,6 @@
 package com.fyp_lubdub;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String File_Path;
 
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -178,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     public void QA(){
+        progressDialog.setMessage("Performing Quality Assessment...");
         float[] Data1 = transform(DataBuffer);
         float[] Data = transform(Data1);
 
@@ -215,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
                 count +=1;
         }
         float Criterial = (float) (count / Data.length);
-        Toast.makeText(this, "RMSSD: "+String.valueOf(RMSSD)+"\nCriterial: "+String.valueOf(Criterial), Toast.LENGTH_LONG).show();
 
         // No. of Peaks
 
@@ -236,16 +238,21 @@ public class MainActivity extends AppCompatActivity {
             endl=endl+ovlap;
         }
         int prcnt=0;
-       // System.out.println(window.size());
         for (int k=0;k<window.size();k++) {
             if (window.get(k)==1)
                 prcnt=prcnt+1;
         }
         prcnt=prcnt/window.size();
         prcnt=prcnt*100;
-        Toast.makeText(this, String.valueOf(prcnt), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "RMSSD: "+String.valueOf(RMSSD)+"\nCriterial: "+String.valueOf(Criterial)
+                +"\nPercent: "+String.valueOf(prcnt), Toast.LENGTH_LONG).show();
+        if (RMSSD<= 0.14 && Criterial < 0.05  && prcnt >= 10 )
+            Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(this, "0", Toast.LENGTH_SHORT).show();
       //  Toast.makeText(this,String.valueOf(Wins1)+'\n'+String.valueOf(TWins), Toast.LENGTH_SHORT).show();
 
+        progressDialog.hide();
     }
 
     public static int detect_peaks(float [] arrayIn,int start,int end,double mph,int mpd) {
@@ -302,7 +309,10 @@ public class MainActivity extends AppCompatActivity {
        //     Toast.makeText(this, "File Selected: " + data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH), Toast.LENGTH_LONG).show();
            File_Path = data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH);
            if(!thrd.isAlive()) {
-               Toast.makeText(this, "Plotting signal", Toast.LENGTH_SHORT).show();
+               progressDialog = new ProgressDialog(MainActivity.this);
+               progressDialog.setIndeterminate(true);
+               progressDialog.setMessage("Plotting Signal...");
+               progressDialog.show();
                H.postDelayed(thrd,500);
            }else {
                Toast.makeText(this, "Thread chal rha hai -.-", Toast.LENGTH_SHORT).show();
