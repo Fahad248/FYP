@@ -1,4 +1,4 @@
-package com.fyp_lubdub;
+ package com.fyp_lubdub;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
@@ -28,6 +29,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -38,17 +40,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-
-import be.tarsos.dsp.wavelet.HaarWaveletTransform;
 
 import static com.github.developerpaul123.filepickerlibrary.FilePickerActivity.REQUEST_FILE;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Interface_MainActivity {
 
-    HaarWaveletTransform hvt;
     private Button strt,stop,pause,open;
+    private TextView file_name;
     private LineChart graph;
     LineData data = null;
 
@@ -56,19 +55,24 @@ public class MainActivity extends AppCompatActivity {
     private Thread thrd ;
     private Handler H;
 
-    private String File_Path;
+    private String strDate,File_Path;
+
+    private FirebaseAuth auth;
 
     ProgressDialog progressDialog;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         strt = findViewById(R.id.start);
         open = findViewById(R.id.OE);
+        file_name = findViewById(R.id.file_name);
         graph = findViewById(R.id.bar);
 
       //  graph.setVisibility(INVISIBLE);
         GraphAxis();
+
+        auth = FirebaseAuth.getInstance();
 
         H = new Handler();
         thrd = new Thread(THREAD);
@@ -81,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
                 GraphAxis();
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String strDate = sdf.format(c.getTime());
+                strDate = sdf.format(c.getTime());
+                file_name.setText(strDate);
                 File_Path = Environment.getExternalStorageDirectory() + "/PCG/"+strDate+".wav";
                // File_Path = Environment.getExternalStorageDirectory() + "/test.wav";
                 //WavRecorder = new WavAudioRecorder(MediaRecorder.AudioSource.MIC, 4000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
@@ -97,12 +102,18 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 WavRecorder.stop();
                 WavRecorder.release();
+                float data[] = WavRecorder.getData();
                 WavRecorder = null;
                 //strt.setText("Record");
                 strt.setBackground(getResources().getDrawable(R.drawable.microphone_green));
                 open.setEnabled(true);
-               // Toast.makeText(MainActivity.this, "Recording Ended", Toast.LENGTH_SHORT).show();
+
+                Quality_Assessment Q = new Quality_Assessment(MainActivity.this, data);
+
+                Toast.makeText(MainActivity.this, String.valueOf(Q.Process()), Toast.LENGTH_SHORT).show();
               //  H.postDelayed(thrd,500);
+
+                Upload();
             }
 
             }
@@ -119,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
     }
     private float[] DataBuffer;
     long temp = 0,temp2 = 0;
-    int data_len = 0;
     Runnable THREAD = new Runnable() {
         @Override
         public void run() {
@@ -145,10 +155,10 @@ public class MainActivity extends AppCompatActivity {
 
                 wavFile.readFrames(DataBuffer, bufSize);
 
-                /*for (int j = 0; j < DataBuffer.length; j+=1) {
+                for (int j = 0; j < DataBuffer.length; j+=4) {
                     //float value = buffer[j];
                     addEntry(DataBuffer[j]);
-                }*/
+                }
                     /*mFrameGains[i] = (int) Math.sqrt(gain);
                     if (mProgressListener != null) {
                         boolean keepGoing = mProgressListener.reportProgress(i * 1.0 / mFrameGains.length);
@@ -167,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                   // graph.setVisibility(VISIBLE);
+                    graph.setVisibility(View.VISIBLE);
                    // Toast.makeText(MainActivity.this, String.valueOf(Data) +"  "+ String.valueOf(temp2), Toast.LENGTH_SHORT).show();
                     thrd.interrupt();
                 //    Upload();
@@ -179,97 +189,27 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
+    @Override
     public void QA(){
         progressDialog.setMessage("Performing Quality Assessment...");
         float[] Data1 = transform(DataBuffer);
         float[] Data = transform(Data1);
 
-        for (int j = 0; j < Data.length; j+=1) {
-            Data[j] = Data[j]*4;
-            addEntry(Data[j]);
-        }
-        graph.setVisibility(View.VISIBLE);
-        float[] Ps = new float[Data.length];
-        ArrayList<Integer>locs = new ArrayList<Integer>();
-        //ArrayList<Integer> Peaks = new ArrayList<Integer>();
-        float thresh = (float) 0.3;
-        int min_dis = 5;
-
-        // RMSSD
-        float temp = 0, temp1;
-        for (int i = 0; i<Data.length-1;i++){
-            temp1 = (float) Math.pow(Math.abs(Data[i+1]-Data[i]),2);
-            temp = temp + temp1;
-            if (Data[i]>=thresh) {
-                Ps[i] = 1; locs.add(i);
-            }
-            else
-                Ps[i] = 0;
-        }
-
-        float RMSSD = (float) Math.sqrt(temp/Data.length);
-
-        // Criterial
-        int count = 0;
-        for (int i = 1; i<Data.length-1; i++){
-            boolean bool1 = (Data[i-1]<0 && Data[i+1]>0);
-            boolean bool2 = (Data[i-1]>0 && Data[i+1]<0);
-            if (bool1 || bool2)
-                count +=1;
-        }
-        float Criterial = (float) (count / Data.length);
-
-        // No. of Peaks
-
-        int fs=4000;//fs of signal
-        int seg = (int) (fs*0.2/4);
-        int ovlap = (int) (seg/4);
-        int start = 0;
-        int endl = seg;
-        int no_of_peaks;
-        ArrayList<Integer> window = new ArrayList<Integer>();
-        for (int k = 0;k < (2*Data.length/seg-1);k++) {
-            no_of_peaks=detect_peaks(Data,start,endl,0.3,5);
-            if (no_of_peaks<=15)
-                window.add(1);
-            else
-                window.add(0);
-            start=endl-ovlap;
-            endl=endl+ovlap;
-        }
-        int prcnt=0;
-        for (int k=0;k<window.size();k++) {
-            if (window.get(k)==1)
-                prcnt=prcnt+1;
-        }
-        prcnt=prcnt/window.size();
-        prcnt=prcnt*100;
-        Toast.makeText(this, "RMSSD: "+String.valueOf(RMSSD)+"\nCriterial: "+String.valueOf(Criterial)
-                +"\nPercent: "+String.valueOf(prcnt), Toast.LENGTH_LONG).show();
-        if (RMSSD<= 0.14 && Criterial < 0.05  && prcnt >= 10 )
-            Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(this, "0", Toast.LENGTH_SHORT).show();
-      //  Toast.makeText(this,String.valueOf(Wins1)+'\n'+String.valueOf(TWins), Toast.LENGTH_SHORT).show();
+        Quality_Assessment QA = new Quality_Assessment(MainActivity.this,Data);
+        int assess = QA.Process();
+        Toast.makeText(MainActivity.this, String.valueOf(assess), Toast.LENGTH_SHORT).show();
 
         progressDialog.hide();
     }
 
-    public static int detect_peaks(float [] arrayIn,int start,int end,double mph,int mpd) {
-        int peaksCounter=0;
-        for (int i=start;i<=end-1;i++){
-            if (arrayIn[i]>=mph){
-                peaksCounter++;
-            }
-        }
-        return peaksCounter;
-    }
+
     public static int log2(int bits) {
         if (bits == 0) {
             return 0;
         }
         return 31 - Integer.numberOfLeadingZeros(bits);
     }
+    @Override
     public float[] transform(float[] s){
         int m = s.length;
        // assert isPowerOfTwo(m);
@@ -306,7 +246,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
        if ((requestCode == REQUEST_FILE) && (resultCode == RESULT_OK)) {
-       //     Toast.makeText(this, "File Selected: " + data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH), Toast.LENGTH_LONG).show();
+         //     Toast.makeText(this, "File Selected: " + data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH), Toast.LENGTH_LONG).show();
+       //    file_name.setText(data.);
            File_Path = data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH);
            if(!thrd.isAlive()) {
                progressDialog = new ProgressDialog(MainActivity.this);
@@ -315,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                progressDialog.show();
                H.postDelayed(thrd,500);
            }else {
-               Toast.makeText(this, "Thread chal rha hai -.-", Toast.LENGTH_SHORT).show();
+               Toast.makeText(MainActivity.this, "Thread chal rha hai -.-", Toast.LENGTH_SHORT).show();
            }
         }
     }
@@ -416,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
         StorageReference storageRef = storage.getReferenceFromUrl("gs://lubdub-1a71d.appspot.com");
 
 // Create a reference to "mountains.jpg"
-        StorageReference WavRef = storageRef.child("test.wav");
+        StorageReference WavRef = storageRef.child(auth.getUid()+"/"+strDate);
 
         InputStream stream = null;
         try {
@@ -430,14 +371,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
-                Toast.makeText(MainActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, exception.getMessage(), Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                Toast.makeText(MainActivity.this, taskSnapshot.getMetadata().getName(), Toast.LENGTH_SHORT).show();
+          //      Toast.makeText(MainActivity.this, taskSnapshot.getMetadata().getName(), Toast.LENGTH_SHORT).show();
             }
         });
 

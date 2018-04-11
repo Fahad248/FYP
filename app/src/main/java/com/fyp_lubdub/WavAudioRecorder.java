@@ -18,6 +18,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 
 /**
  * Created by Fahaid on 12/20/2017.
@@ -133,7 +134,7 @@ public class WavAudioRecorder {
             // AxisDependency.LEFT);
         }
     }
-
+    public ArrayList<Float> data = new ArrayList<Float>();
     private LineDataSet createSet() {
 
         LineDataSet set = new LineDataSet(null, "PCG Signal");
@@ -176,6 +177,7 @@ public class WavAudioRecorder {
                 }
 
                 addEntry((float) val);
+                data.add((float) val);
             }
 
 //			Log.d(WavAudioRecorder.this.getClass().getName(), state + ":" + numOfBytes);
@@ -193,6 +195,12 @@ public class WavAudioRecorder {
     };
 
 
+    public float[] getData(){
+        float [] temp = new float[data.size()];
+        for(int i = 0; i<temp.length; i++)
+        {temp[i] = data.get(i);}
+        return temp;
+    }
 
     /**
      *
