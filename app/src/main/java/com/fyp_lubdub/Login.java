@@ -17,12 +17,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity {
 
     private EditText mail, pass;
     private Button login,signUP;
     private FirebaseAuth auth;
+    private Dialog dialog;
+    private boolean show;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +72,7 @@ public class Login extends AppCompatActivity {
         signUP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(Login.this);
+                dialog = new Dialog(Login.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setCancelable(false);
                 dialog.setContentView(R.layout.signup);
@@ -84,7 +88,7 @@ public class Login extends AppCompatActivity {
                 Proceed.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String name,mail,pass,Cpass;
+                        final String name,mail,pass,Cpass;
                         name = Ename.getText().toString(); mail = Email.getText().toString();
                         pass = Epass.getText().toString(); Cpass = ECpass.getText().toString();
                         if (pass.equals(Cpass)){
@@ -94,6 +98,11 @@ public class Login extends AppCompatActivity {
                                     if(task.isSuccessful()) {
                                         Toast.makeText(Login.this, "Account Created!!", Toast.LENGTH_SHORT).show();
                                         dialog.dismiss();
+
+                                        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                                     //   db.child(auth.getUid()).push().setValue("Profile");
+                                        db.child(auth.getUid()+"/Profile/").setValue(new Credentials(name));
+                                        db.child(auth.getUid()+"/Signals/").setValue(new Credentials(name));
                                     }
                                     else {
 
@@ -114,7 +123,22 @@ public class Login extends AppCompatActivity {
                 });
 
                 dialog.show();
+                show = true;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(show)
+            dialog.dismiss();
+    }
+}
+
+class Credentials{
+    String Name;
+    Credentials(String name){
+        this.Name = name;
     }
 }

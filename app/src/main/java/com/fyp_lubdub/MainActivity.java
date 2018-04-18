@@ -1,48 +1,56 @@
  package com.fyp_lubdub;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+ import android.app.ProgressDialog;
+ import android.content.Intent;
+ import android.graphics.Color;
+ import android.net.Uri;
+ import android.os.Bundle;
+ import android.os.Environment;
+ import android.os.Handler;
+ import android.support.annotation.NonNull;
+ import android.support.v7.app.AppCompatActivity;
+ import android.view.View;
+ import android.widget.Button;
+ import android.widget.TextView;
+ import android.widget.Toast;
 
-import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
-import com.github.developerpaul123.filepickerlibrary.enums.Request;
-import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+ import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
+ import com.github.developerpaul123.filepickerlibrary.enums.Request;
+ import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
+ import com.github.mikephil.charting.charts.LineChart;
+ import com.github.mikephil.charting.components.XAxis;
+ import com.github.mikephil.charting.components.YAxis;
+ import com.github.mikephil.charting.data.Entry;
+ import com.github.mikephil.charting.data.LineData;
+ import com.github.mikephil.charting.data.LineDataSet;
+ import com.github.mikephil.charting.highlight.Highlight;
+ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+ import com.github.mikephil.charting.utils.ColorTemplate;
+ import com.google.android.gms.tasks.OnFailureListener;
+ import com.google.android.gms.tasks.OnSuccessListener;
+ import com.google.firebase.auth.FirebaseAuth;
+ import com.google.firebase.database.DataSnapshot;
+ import com.google.firebase.database.DatabaseError;
+ import com.google.firebase.database.DatabaseReference;
+ import com.google.firebase.database.FirebaseDatabase;
+ import com.google.firebase.database.ValueEventListener;
+ import com.google.firebase.storage.FirebaseStorage;
+ import com.google.firebase.storage.StorageReference;
+ import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+ import java.io.File;
+ import java.io.FileInputStream;
+ import java.io.FileNotFoundException;
+ import java.io.IOException;
+ import java.io.InputStream;
+ import java.text.DateFormat;
+ import java.text.SimpleDateFormat;
+ import java.util.Calendar;
+ import java.util.HashMap;
+ import java.util.Map;
 
-import static com.github.developerpaul123.filepickerlibrary.FilePickerActivity.REQUEST_FILE;
+ import static com.github.developerpaul123.filepickerlibrary.FilePickerActivity.REQUEST_FILE;
 
 public class MainActivity extends AppCompatActivity implements Interface_MainActivity {
 
@@ -84,8 +92,13 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
             if (WavRecorder == null) {
                 GraphAxis();
                 Calendar c = Calendar.getInstance();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                strDate = sdf.format(c.getTime());
+                DateFormat df = new SimpleDateFormat("h:mm a");
+                String time = df.format(Calendar.getInstance().getTime());
+
+                DateFormat df2 = new SimpleDateFormat("EEE, MMM d, ''yy");
+                String date = df2.format(Calendar.getInstance().getTime());
+
+                strDate = date+"_"+time;
                 file_name.setText(strDate);
                 File_Path = Environment.getExternalStorageDirectory() + "/PCG/"+strDate+".wav";
                // File_Path = Environment.getExternalStorageDirectory() + "/test.wav";
@@ -351,6 +364,8 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
         return set;
     }
 
+    int count;
+
     private void Upload(){
         // Create a storage reference from our app
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -378,6 +393,31 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                DateFormat df = new SimpleDateFormat("h:mm a");
+                final String time = df.format(Calendar.getInstance().getTime());
+
+                DateFormat df2 = new SimpleDateFormat("EEE, MMM d, ''yy");
+                final String date = df2.format(Calendar.getInstance().getTime());
+
+
+
+                final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                //   db.child(auth.getUid()).push().setValue("Profile");
+                db.child(auth.getUid()+"/Signals/"+date).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        count= (int) dataSnapshot.getChildrenCount();
+                        Map<String,Object> map = new HashMap<>();
+                        map.put(String.valueOf(count),time);
+                        db.child(auth.getUid()+"/Signals/"+date).updateChildren(map);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
           //      Toast.makeText(MainActivity.this, taskSnapshot.getMetadata().getName(), Toast.LENGTH_SHORT).show();
             }
         });

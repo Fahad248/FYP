@@ -36,6 +36,7 @@ dependencies {
     compile 'com.firebaseui:firebase-ui-database:0.4.0'
     compile 'com.github.axet:TarsosDSP:2.4-1'
     compile 'com.android.support:design:27.1.1'
+    compile 'com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1'
     testCompile 'junit:junit:4.12'
 }
 
