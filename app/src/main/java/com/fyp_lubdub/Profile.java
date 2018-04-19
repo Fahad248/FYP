@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +24,8 @@ public class Profile extends AppCompatActivity {
     private FloatingActionButton fab;
     private DatabaseReference db;
     private FirebaseAuth auth;
-    private RecyclerView Hist;
+    private ExpandableListView Hist;
+    private Hist_Adapter adap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,32 +41,63 @@ public class Profile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(Profile.this,MainActivity.class);
                 startActivity(i);
+                adap=null;
+                Hist.setAdapter(adap);
+                finish();
             }
         });
         getHistory();
 
+        Intent i = getIntent();
+        boolean fetch = i.getBooleanExtra("Fetch",false);
+        if(fetch){
+            db.child(auth.getUid()+"/New/Normal").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dS) {
+                    int result = Integer.valueOf(dS.getValue().toString());
+                    if (result == 1)
+                        Toast.makeText(Profile.this,"Signal is Normal!!!", Toast.LENGTH_LONG).show();
+                    else
+                        Toast.makeText(Profile.this,"Signal is AbNormal!!!", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
 
     }
 
-    private ArrayList<String> date,time;
+    ArrayList<String> date;
+    ArrayList<String> time;
     private Map<String,ArrayList<String>> DT ;
     private void getHistory(){
-        DT = new HashMap<>();
-        date = new ArrayList<>();
+
+
+
         db.child(auth.getUid()+"/Signals/").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                DT = new HashMap<>();
+                date = new ArrayList<>();
                 for (final DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                    String d = String.valueOf(childDataSnapshot.getKey());
+                   final String d = String.valueOf(childDataSnapshot.getKey());
                    date.add(d);
                    db.child(auth.getUid()+"/Signals/"+d).addValueEventListener(new ValueEventListener() {
                        @Override
                        public void onDataChange(DataSnapshot DS) {
                            time = new ArrayList<>();
                            for (DataSnapshot timeDS : DS.getChildren()) {
-                               String t = String.valueOf(timeDS);
+                               String t = String.valueOf(timeDS.getValue());
                                time.add(t);
+                           }
+                           if(time.size()>0) {
+                               DT.put(d, time);
+                               adap = new Hist_Adapter(Profile.this, date, DT);
+                               Hist.setAdapter(adap);
                            }
                        }
 
@@ -74,13 +106,17 @@ public class Profile extends AppCompatActivity {
                            Toast.makeText(Profile.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                        }
                    });
-                   DT.put(date.get(date.size()-1),time);
+
+
+                   // Toast.makeText(Profile.this, String.valueOf(DT.get(d)), Toast.LENGTH_SHORT).show();
                    }
+             //   Toast.makeText(Profile.this, String.valueOf(date.size()), Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(Profile.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Profile.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

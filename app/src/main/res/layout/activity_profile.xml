@@ -21,7 +21,7 @@
         app:backgroundTint="?attr/colorPrimary"
         app:srcCompat="@drawable/ic_plus" />
 
-    <android.support.v7.widget.RecyclerView
+    <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/hist"/>

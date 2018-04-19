@@ -46,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:drawableTint="#000"
                     android:hint="Email"
+                    android:textColorHint="#fff"
                     android:inputType="textEmailAddress"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
@@ -62,6 +63,7 @@
                     android:drawableTint="#000"
                     android:hint="Password"
                     android:text="123456"
+                    android:textColorHint="#fff"
                     android:inputType="textPassword"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>

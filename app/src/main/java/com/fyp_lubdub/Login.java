@@ -78,7 +78,7 @@ public class Login extends AppCompatActivity {
                 dialog.setContentView(R.layout.signup);
                 final EditText Ename,Email,Epass,ECpass;
                 Button Proceed;
-
+                show = true;
                 Ename = dialog.findViewById(R.id.Name); Email = dialog.findViewById(R.id.EMail);
                 Epass = dialog.findViewById(R.id.Pass); ECpass = dialog.findViewById(R.id.CPass);
                 Proceed = dialog.findViewById(R.id.proceed);
@@ -103,6 +103,7 @@ public class Login extends AppCompatActivity {
                                      //   db.child(auth.getUid()).push().setValue("Profile");
                                         db.child(auth.getUid()+"/Profile/").setValue(new Credentials(name));
                                         db.child(auth.getUid()+"/Signals/").setValue(new Credentials(name));
+
                                     }
                                     else {
 
@@ -123,7 +124,7 @@ public class Login extends AppCompatActivity {
                 });
 
                 dialog.show();
-                show = true;
+
             }
         });
     }

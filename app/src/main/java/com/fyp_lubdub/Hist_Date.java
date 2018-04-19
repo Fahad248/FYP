@@ -1,8 +1,11 @@
 package com.fyp_lubdub;
 
-import java.util.ArrayList;
+import com.bignerdranch.expandablerecyclerview.model.Parent;
 
-public class Hist_Date implements Parent<Hist_Time>{
+import java.util.ArrayList;
+import java.util.List;
+
+public class Hist_Date implements Parent<String> {
 
     // a recipe contains several ingredients
     private ArrayList<String> time;
@@ -13,7 +16,7 @@ public class Hist_Date implements Parent<Hist_Time>{
     }
 
     @Override
-    public ArrayList<String> getChildList() {
+    public List<String> getChildList() {
         return time;
     }
 

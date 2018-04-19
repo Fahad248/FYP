@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                 DateFormat df = new SimpleDateFormat("h:mm a");
                 String time = df.format(Calendar.getInstance().getTime());
 
-                DateFormat df2 = new SimpleDateFormat("EEE, MMM d, ''yy");
+                DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
                 String date = df2.format(Calendar.getInstance().getTime());
 
                 strDate = date+"_"+time;
@@ -115,18 +115,17 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
             } else {
                 WavRecorder.stop();
                 WavRecorder.release();
-                float data[] = WavRecorder.getData();
                 WavRecorder = null;
                 //strt.setText("Record");
                 strt.setBackground(getResources().getDrawable(R.drawable.microphone_green));
                 open.setEnabled(true);
 
-                Quality_Assessment Q = new Quality_Assessment(MainActivity.this, data);
+                progressDialog = new ProgressDialog(MainActivity.this);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Performing Quality Assessment...");
+                progressDialog.show();
+                H.postDelayed(thrd,500);
 
-                Toast.makeText(MainActivity.this, String.valueOf(Q.Process()), Toast.LENGTH_SHORT).show();
-              //  H.postDelayed(thrd,500);
-
-                Upload();
             }
 
             }
@@ -212,6 +211,8 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
         int assess = QA.Process();
         Toast.makeText(MainActivity.this, String.valueOf(assess), Toast.LENGTH_SHORT).show();
 
+        if (assess == 1)
+            Upload();
         progressDialog.hide();
     }
 
@@ -268,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                progressDialog.setMessage("Plotting Signal...");
                progressDialog.show();
                H.postDelayed(thrd,500);
+               progressDialog.hide();
            }else {
                Toast.makeText(MainActivity.this, "Thread chal rha hai -.-", Toast.LENGTH_SHORT).show();
            }
@@ -365,6 +367,7 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
     }
 
     int count;
+    private boolean success = false;
 
     private void Upload(){
         // Create a storage reference from our app
@@ -385,7 +388,6 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
                 Toast.makeText(MainActivity.this, exception.getMessage(), Toast.LENGTH_LONG).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -397,12 +399,15 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                 DateFormat df = new SimpleDateFormat("h:mm a");
                 final String time = df.format(Calendar.getInstance().getTime());
 
-                DateFormat df2 = new SimpleDateFormat("EEE, MMM d, ''yy");
+                DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
                 final String date = df2.format(Calendar.getInstance().getTime());
 
 
-
+                Map<String,Object> taskMap = new HashMap<>();
+                taskMap.put("Path",auth.getUid()+"/"+strDate);
                 final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                db.child(auth.getUid()+"/New/").updateChildren(taskMap);
+
                 //   db.child(auth.getUid()).push().setValue("Profile");
                 db.child(auth.getUid()+"/Signals/"+date).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -411,6 +416,7 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                         Map<String,Object> map = new HashMap<>();
                         map.put(String.valueOf(count),time);
                         db.child(auth.getUid()+"/Signals/"+date).updateChildren(map);
+                        success = true;
                     }
 
                     @Override
@@ -422,5 +428,13 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i = new Intent(MainActivity.this,Profile.class);
+        i.putExtra("Fetch",true);
+        startActivity(i);
     }
 }
