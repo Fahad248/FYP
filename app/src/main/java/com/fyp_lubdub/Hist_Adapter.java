@@ -15,12 +15,13 @@ public class Hist_Adapter extends BaseExpandableListAdapter {
     private ArrayList<String> Date; // header titles
     // child data in format of header title, child title
     private ArrayList<String> Time;
-    private Map<String,ArrayList<String>> Data;
+    private Map<String,ArrayList<String>> Data, Score;
 
-    public Hist_Adapter(Context context,ArrayList<String> Date, Map<String,ArrayList<String>> Data){
+    public Hist_Adapter(Context context,ArrayList<String> Date, Map<String,ArrayList<String>> Data,Map<String,ArrayList<String>> Score){
         this._context = context;
         this.Date = Date;
         this.Data = Data;
+        this.Score = Score;
     }
 
     @Override
@@ -39,6 +40,7 @@ public class Hist_Adapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String childText = (String) getChild(groupPosition, childPosition);
+        final String score = (String )this.Score.get(this.Date.get(groupPosition)).get(childPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

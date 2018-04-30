@@ -1,56 +1,53 @@
  package com.fyp_lubdub;
 
  import android.app.ProgressDialog;
- import android.content.Intent;
- import android.graphics.Color;
- import android.net.Uri;
- import android.os.Bundle;
- import android.os.Environment;
- import android.os.Handler;
- import android.support.annotation.NonNull;
- import android.support.v7.app.AppCompatActivity;
- import android.view.View;
- import android.widget.Button;
- import android.widget.TextView;
- import android.widget.Toast;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
- import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
- import com.github.developerpaul123.filepickerlibrary.enums.Request;
- import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
- import com.github.mikephil.charting.charts.LineChart;
- import com.github.mikephil.charting.components.XAxis;
- import com.github.mikephil.charting.components.YAxis;
- import com.github.mikephil.charting.data.Entry;
- import com.github.mikephil.charting.data.LineData;
- import com.github.mikephil.charting.data.LineDataSet;
- import com.github.mikephil.charting.highlight.Highlight;
- import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
- import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
- import com.github.mikephil.charting.utils.ColorTemplate;
- import com.google.android.gms.tasks.OnFailureListener;
- import com.google.android.gms.tasks.OnSuccessListener;
- import com.google.firebase.auth.FirebaseAuth;
- import com.google.firebase.database.DataSnapshot;
- import com.google.firebase.database.DatabaseError;
- import com.google.firebase.database.DatabaseReference;
- import com.google.firebase.database.FirebaseDatabase;
- import com.google.firebase.database.ValueEventListener;
- import com.google.firebase.storage.FirebaseStorage;
- import com.google.firebase.storage.StorageReference;
- import com.google.firebase.storage.UploadTask;
+import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
+import com.github.developerpaul123.filepickerlibrary.enums.Request;
+import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
- import java.io.File;
- import java.io.FileInputStream;
- import java.io.FileNotFoundException;
- import java.io.IOException;
- import java.io.InputStream;
- import java.text.DateFormat;
- import java.text.SimpleDateFormat;
- import java.util.Calendar;
- import java.util.HashMap;
- import java.util.Map;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
- import static com.github.developerpaul123.filepickerlibrary.FilePickerActivity.REQUEST_FILE;
+import static com.github.developerpaul123.filepickerlibrary.FilePickerActivity.REQUEST_FILE;
 
 public class MainActivity extends AppCompatActivity implements Interface_MainActivity {
 
@@ -78,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
         graph = findViewById(R.id.bar);
 
       //  graph.setVisibility(INVISIBLE);
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setIndeterminate(true);
         GraphAxis();
 
         auth = FirebaseAuth.getInstance();
@@ -120,12 +119,11 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                 strt.setBackground(getResources().getDrawable(R.drawable.microphone_green));
                 open.setEnabled(true);
 
-                progressDialog = new ProgressDialog(MainActivity.this);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setMessage("Performing Quality Assessment...");
-                progressDialog.show();
-                H.postDelayed(thrd,500);
 
+                progressDialog.setMessage("Uploading File...");
+                progressDialog.show();
+                //H.postDelayed(thrd,500);
+                Upload();
             }
 
             }
@@ -194,7 +192,8 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                     thrd.interrupt();
                 //    Upload();
                     H.removeCallbacks(thrd);
-                QA();
+                //QA();
+                    Upload();
                 }
             });
         }
@@ -264,8 +263,7 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
        //    file_name.setText(data.);
            File_Path = data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH);
            if(!thrd.isAlive()) {
-               progressDialog = new ProgressDialog(MainActivity.this);
-               progressDialog.setIndeterminate(true);
+
                progressDialog.setMessage("Plotting Signal...");
                progressDialog.show();
                H.postDelayed(thrd,500);
@@ -374,7 +372,7 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl("gs://lubdub-1a71d.appspot.com");
 
-// Create a reference to "mountains.jpg"
+
         StorageReference WavRef = storageRef.child(auth.getUid()+"/"+strDate);
 
         InputStream stream = null;
@@ -405,11 +403,18 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
 
                 Map<String,Object> taskMap = new HashMap<>();
                 taskMap.put("Path",auth.getUid()+"/"+strDate);
+                taskMap.put("Date",date);
+                taskMap.put("Time",time);
                 final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-                db.child(auth.getUid()+"/New/").updateChildren(taskMap);
+                db.child("Admin/"+auth.getUid()+"/Signal/").updateChildren(taskMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        progressDialog.dismiss();
+                    }
+                });
 
                 //   db.child(auth.getUid()).push().setValue("Profile");
-                db.child(auth.getUid()+"/Signals/"+date).addListenerForSingleValueEvent(new ValueEventListener() {
+               /* db.child(auth.getUid()+"/Signals/"+date).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         count= (int) dataSnapshot.getChildrenCount();
@@ -417,13 +422,14 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                         map.put(String.valueOf(count),time);
                         db.child(auth.getUid()+"/Signals/"+date).updateChildren(map);
                         success = true;
+                        progressDialog.dismiss();
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
-                });
+                });*/
           //      Toast.makeText(MainActivity.this, taskSnapshot.getMetadata().getName(), Toast.LENGTH_SHORT).show();
             }
         });

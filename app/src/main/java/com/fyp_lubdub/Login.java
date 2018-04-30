@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -77,12 +78,13 @@ public class Login extends AppCompatActivity {
                 dialog.setCancelable(false);
                 dialog.setContentView(R.layout.signup);
                 final EditText Ename,Email,Epass,ECpass;
+                final ImageView cancel;
                 Button Proceed;
                 show = true;
                 Ename = dialog.findViewById(R.id.Name); Email = dialog.findViewById(R.id.EMail);
                 Epass = dialog.findViewById(R.id.Pass); ECpass = dialog.findViewById(R.id.CPass);
                 Proceed = dialog.findViewById(R.id.proceed);
-
+                cancel = dialog.findViewById(R.id.cancel);
 
 
                 Proceed.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +122,14 @@ public class Login extends AppCompatActivity {
                         }else{
                             Toast.makeText(Login.this, "Password Mismatch", Toast.LENGTH_SHORT).show();
                         }
+                    }
+                });
+
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.hide();
+                        dialog.dismiss();
                     }
                 });
 

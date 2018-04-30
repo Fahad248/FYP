@@ -8,6 +8,17 @@
     android:orientation="vertical"
     android:scrollbarAlwaysDrawVerticalTrack="true">
 
+    <ImageView
+        android:id="@+id/cancel"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/cancel_red"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="15dp"
+        android:layout_margin="15dp"/>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +28,9 @@
         android:textSize="16sp"
         android:layout_margin="10dp"
         android:textColorHint="#CAC4CE"
+        android:backgroundTint="#CAC4CE"
         android:maxLines="1"
+        android:layout_below="@+id/cancel"
         />
 
     <EditText
@@ -31,7 +44,8 @@
         android:maxLines="1"
         android:textColor="#fff"
         android:textColorHint="#CAC4CE"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:backgroundTint="#CAC4CE"/>
 
     <EditText
         android:id="@+id/Pass"
@@ -44,7 +58,8 @@
         android:maxLines="1"
         android:textColor="#fff"
         android:textColorHint="#CAC4CE"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:backgroundTint="#CAC4CE"/>
 
     <EditText
         android:id="@+id/CPass"
@@ -57,19 +72,18 @@
         android:maxLines="1"
         android:textColor="#fff"
         android:textColorHint="#CAC4CE"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:backgroundTint="#CAC4CE"/>
 
     <Button
         android:id="@+id/proceed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/CPass"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/CPass"
+        android:background="#d67601"
         android:text="Proceed"
         android:textColor="#fff"
-        android:background="#d67601"
-        android:layout_alignRight="@+id/CPass"
-        android:layout_below="@+id/CPass"/>
+        android:layout_margin="5dp"/>
 
 </RelativeLayout>

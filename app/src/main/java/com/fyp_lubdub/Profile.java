@@ -15,7 +15,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +51,7 @@ public class Profile extends AppCompatActivity {
         });
         getHistory();
 
-        Intent i = getIntent();
+        /*Intent i = getIntent();
         boolean fetch = i.getBooleanExtra("Fetch",false);
         if(fetch){
             db.child(auth.getUid()+"/New/Normal").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -66,37 +69,60 @@ public class Profile extends AppCompatActivity {
 
                 }
             });
-        }
+        }*/
 
+        Hist.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Toast.makeText(Profile.this, "Score: "+D_Score.get(date.get(groupPosition)).get(childPosition), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
 
     }
 
     ArrayList<String> date;
-    ArrayList<String> time;
-    private Map<String,ArrayList<String>> DT ;
+    ArrayList<String> time,RMSSD,Criterial,Score;
+    private Map<String,ArrayList<String>> DT , D_Score;
+    String d,d_orig;
     private void getHistory(){
-
 
 
         db.child(auth.getUid()+"/Signals/").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DT = new HashMap<>();
+                D_Score= new HashMap<>();
                 date = new ArrayList<>();
                 for (final DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                   final String d = String.valueOf(childDataSnapshot.getKey());
+                   d = String.valueOf(childDataSnapshot.getKey());
+                   d_orig = String.valueOf(childDataSnapshot.getKey());
+                    SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
+                    try {
+                        Date temp = df1.parse(d);
+                        df1 = new SimpleDateFormat("dd-MM-yyyy");
+                        d = df1.format(temp);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                    date.add(d);
-                   db.child(auth.getUid()+"/Signals/"+d).addValueEventListener(new ValueEventListener() {
+                   db.child(auth.getUid()+"/Signals/"+d_orig).addValueEventListener(new ValueEventListener() {
                        @Override
                        public void onDataChange(DataSnapshot DS) {
                            time = new ArrayList<>();
-                           for (DataSnapshot timeDS : DS.getChildren()) {
-                               String t = String.valueOf(timeDS.getValue());
+                           Score = new ArrayList<>();
+                         //  Toast.makeText(Profile.this, DS.getKey(), Toast.LENGTH_SHORT).show();
+                           for (DataSnapshot keyDS : DS.getChildren()) {
+                               String t = String.valueOf(keyDS.child("Time").getValue());
+                               String score = String.valueOf(keyDS.child("Score").getValue());
                                time.add(t);
+                               Score.add(score);
+                              // Toast.makeText(Profile.this, t, Toast.LENGTH_SHORT).show();
                            }
                            if(time.size()>0) {
                                DT.put(d, time);
-                               adap = new Hist_Adapter(Profile.this, date, DT);
+                               D_Score.put(d,Score);
+                               adap = new Hist_Adapter(Profile.this, date, DT,D_Score);
                                Hist.setAdapter(adap);
                            }
                        }
