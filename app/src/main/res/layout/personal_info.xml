@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/close_dia"
+        android:text="close"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:layout_alignRight="@+id/contact"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/personal_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="25dp"
+        android:text="Personal Information"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/personal_header"
+        android:hint="Contact"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:id="@+id/contact"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact"
+        android:hint="Age"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:id="@+id/age"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/age"
+        android:hint="City"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:id="@+id/city"/>
+
+
+    <TextView
+        android:id="@+id/medical_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="25dp"
+        android:text="Medical History"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/city"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/medical_header"
+        android:hint="Weight"
+        android:gravity="center"
+        android:id="@+id/weight"
+        android:layout_margin="15dp"
+        android:inputType="number"
+        android:maxLines="1"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/weight"
+        android:hint="Blood Group"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:maxLines="1"
+        android:maxLength="2"
+        android:id="@+id/bloodGroup"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Diabetes"
+        android:textColor="#000"
+        android:layout_below="@+id/bloodGroup"
+        android:textSize="18sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:id="@+id/dia"/>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bloodGroup"
+        android:layout_marginTop="12dp"
+        android:layout_alignRight="@+id/weight"
+        android:layout_marginRight="30dp"
+        android:id="@+id/diabetes"
+        android:layout_alignBaseline="@+id/dia"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hyper Tension"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/dia"
+        android:id="@+id/hyp"
+        />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_alignRight="@+id/weight"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/diabetes"
+        android:id="@+id/hyper"
+        android:layout_alignBaseline="@+id/hyp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Heart Problems"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/hyp"
+        android:id="@+id/heart"
+        />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_alignRight="@+id/weight"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/hyper"
+        android:id="@+id/heart_problems"
+        android:layout_alignBaseline="@+id/heart"/>
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="High Cholestrol"
+    android:textColor="#000"
+    android:textSize="18sp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="15dp"
+    android:layout_below="@+id/heart"
+    android:id="@+id/choles"
+    />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_alignRight="@+id/weight"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/hyper"
+        android:id="@+id/cholestrol"
+        android:layout_alignBaseline="@+id/choles"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Smoker"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/choles"
+        android:id="@+id/smoke"
+        />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_alignRight="@+id/weight"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/hyper"
+        android:id="@+id/smoking"
+        android:layout_alignBaseline="@+id/smoke"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chest Pain"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/smoke"
+        android:id="@+id/chest"
+        />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_alignRight="@+id/weight"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/hyper"
+        android:id="@+id/chest_pain"
+        android:layout_alignBaseline="@+id/chest"/>
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nausea"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/chest"
+        android:id="@+id/naus"
+        />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_alignRight="@+id/weight"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/hyper"
+        android:id="@+id/nausea"
+        android:layout_alignBaseline="@+id/naus"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sweating"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/naus"
+        android:id="@+id/sweat"
+        />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_alignRight="@+id/weight"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/hyper"
+        android:id="@+id/sweating"
+        android:layout_alignBaseline="@+id/sweat"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sweat"
+        android:layout_centerInParent="true"
+        android:text="Save"
+        android:id="@+id/info_proceed"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:textColor="#fff"
+        android:background="@color/colorPrimaryDark"/>
+</RelativeLayout>
+
+</ScrollView>

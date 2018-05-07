@@ -5,24 +5,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Profile">
+    tools:context=".Profile"
+    android:background="@color/colorPrimaryDark">
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/newRec"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginEnd="30dp"
-        android:background="@color/colorPrimary"
-        android:clickable="true"
-        app:backgroundTint="?attr/colorPrimary"
-        app:srcCompat="@drawable/ic_plus" />
-
-    <ExpandableListView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/hist"/>
+        android:text="Profile"
+        android:id="@+id/view_profile"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="25sp"
+        android:layout_alignParentEnd="true"
+        android:visibility="visible"
+        android:layout_toRightOf="@+id/gap"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/layout"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gap"
+        android:text="  "
+        android:layout_centerHorizontal= "true"
+        android:layout_above="@+id/RL"
+        tools:ignore="UnknownId"
+        android:layout_marginTop="50dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/gap"
+        android:id="@+id/layout"
+        tools:ignore="InvalidId"
+        android:background="#fff"/>
+
+
+    <TextView
+        android:id="@+id/text_hist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/layout"
+        android:layout_toLeftOf="@+id/gap"
+
+        android:layout_toStartOf="@+id/gap"
+        android:text="History"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:textColor="@color/colorPrimaryDark"/>
+
+
 </RelativeLayout>

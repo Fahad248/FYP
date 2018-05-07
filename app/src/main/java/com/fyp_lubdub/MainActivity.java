@@ -1,16 +1,19 @@
  package com.fyp_lubdub;
 
- import android.app.ProgressDialog;
+ import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +33,11 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -51,7 +57,7 @@ import static com.github.developerpaul123.filepickerlibrary.FilePickerActivity.R
 
 public class MainActivity extends AppCompatActivity implements Interface_MainActivity {
 
-    private Button strt,stop,pause,open;
+    private Button strt,stop,pause,open,back;
     private TextView file_name;
     private LineChart graph;
     LineData data = null;
@@ -63,20 +69,21 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
     private String strDate,File_Path;
 
     private FirebaseAuth auth;
+    private  DatabaseReference db;
 
-    ProgressDialog progressDialog;
+    Dialog dialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         strt = findViewById(R.id.start);
         open = findViewById(R.id.OE);
         file_name = findViewById(R.id.file_name);
         graph = findViewById(R.id.bar);
+        back = findViewById(R.id.background);
 
       //  graph.setVisibility(INVISIBLE);
-        progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setIndeterminate(true);
         GraphAxis();
 
         auth = FirebaseAuth.getInstance();
@@ -109,19 +116,19 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                 WavRecorder.start();
                 //Toast.makeText(MainActivity.this, "Recording Started \n", Toast.LENGTH_LONG).show();
                // strt.setText("Stop");
-                strt.setBackground(getResources().getDrawable(R.drawable.microphone_red));
+                back.setBackground(getResources().getDrawable(R.drawable.round_red));
                 open.setEnabled(false);
             } else {
                 WavRecorder.stop();
                 WavRecorder.release();
                 WavRecorder = null;
                 //strt.setText("Record");
-                strt.setBackground(getResources().getDrawable(R.drawable.microphone_green));
+                back.setBackground(getResources().getDrawable(R.drawable.round_green));
                 open.setEnabled(true);
 
 
-                progressDialog.setMessage("Uploading File...");
-                progressDialog.show();
+                /*progressDialog.setMessage("Uploading File...");
+                progressDialog.show();*/
                 //H.postDelayed(thrd,500);
                 Upload();
             }
@@ -136,6 +143,51 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
             }
         });
 
+
+        db = FirebaseDatabase.getInstance().getReference();
+
+        try {
+            db.child("Admin/" + auth.getUid() + "/Signal").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    try {
+                        String analyzed = dataSnapshot.child("Analyzed").getValue().toString();
+                        if (analyzed.equals("1")) {
+                            String score = dataSnapshot.child("Score").getValue().toString();
+                            if(!score.equals("None")) {
+                                if (score.equals("0")) {
+                                    deleteFile(dataSnapshot.child("Path").getValue().toString());
+                                    db.child("Admin/" + auth.getUid()).removeValue();
+                                    dialog.setContentView(R.layout.response_dialog);
+                                    TextView OK = dialog.findViewById(R.id.textOK);
+                                    OK.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                }
+                                else if (score.equals("1")){
+                                    dialog.dismiss();
+                                    Toast.makeText(MainActivity.this, "Signal OK !", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception e){
+                     //   Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        catch(Exception e){
+          //  Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
 
     }
     private float[] DataBuffer;
@@ -169,15 +221,7 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                     //float value = buffer[j];
                     addEntry(DataBuffer[j]);
                 }
-                    /*mFrameGains[i] = (int) Math.sqrt(gain);
-                    if (mProgressListener != null) {
-                        boolean keepGoing = mProgressListener.reportProgress(i * 1.0 / mFrameGains.length);
-                        if (!keepGoing) {
-                            break;
-                        }
-                    }*/
 
-                //temp = (int) wavFile.getSampleRate();
                 wavFile.close();
 
 
@@ -188,21 +232,20 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                 @Override
                 public void run() {
                     graph.setVisibility(View.VISIBLE);
-                   // Toast.makeText(MainActivity.this, String.valueOf(Data) +"  "+ String.valueOf(temp2), Toast.LENGTH_SHORT).show();
                     thrd.interrupt();
-                //    Upload();
                     H.removeCallbacks(thrd);
-                //QA();
                     Upload();
                 }
             });
         }
 
+
+
     };
 
     @Override
     public void QA(){
-        progressDialog.setMessage("Performing Quality Assessment...");
+
         float[] Data1 = transform(DataBuffer);
         float[] Data = transform(Data1);
 
@@ -212,7 +255,6 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
 
         if (assess == 1)
             Upload();
-        progressDialog.hide();
     }
 
 
@@ -262,15 +304,14 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
          //     Toast.makeText(this, "File Selected: " + data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH), Toast.LENGTH_LONG).show();
        //    file_name.setText(data.);
            File_Path = data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH);
-           if(!thrd.isAlive()) {
+           new ProgressTask(MainActivity.this).execute();
+           /*if(!thrd.isAlive()) {
 
-               progressDialog.setMessage("Plotting Signal...");
-               progressDialog.show();
                H.postDelayed(thrd,500);
-               progressDialog.hide();
+
            }else {
                Toast.makeText(MainActivity.this, "Thread chal rha hai -.-", Toast.LENGTH_SHORT).show();
-           }
+           }*/
         }
     }
 
@@ -304,7 +345,8 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
         //axis.setDrawGridLines(false);
 
         YAxis left = graph.getAxisLeft();
-        left.setTextColor(Color.parseColor("#000000"));
+        left.setEnabled(false);
+       // left.setTextColor(Color.parseColor("#000000"));
 
         YAxis right = graph.getAxisRight();
         right.setEnabled(false);
@@ -367,7 +409,23 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
     int count;
     private boolean success = false;
 
+    ProgressBar Progress;
+    TextView text;
+
     private void Upload(){
+
+        dialog = new Dialog(MainActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_layout);
+
+        text = dialog.findViewById(R.id.dia_text);
+        text.setText("Uploading File...");
+        Progress = dialog.findViewById(R.id.progress);
+
+        Progress.setIndeterminate(true);
+        dialog.show();
+
         // Create a storage reference from our app
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl("gs://lubdub-1a71d.appspot.com");
@@ -392,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+               // Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                 DateFormat df = new SimpleDateFormat("h:mm a");
                 final String time = df.format(Calendar.getInstance().getTime());
@@ -400,40 +458,50 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                 DateFormat df2 = new SimpleDateFormat("yyyy-MM-dd");
                 final String date = df2.format(Calendar.getInstance().getTime());
 
-
                 Map<String,Object> taskMap = new HashMap<>();
                 taskMap.put("Path",auth.getUid()+"/"+strDate);
                 taskMap.put("Date",date);
                 taskMap.put("Time",time);
-                final DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+                taskMap.put("Analyzed","0");
+               // taskMap.put("Fetched","0");
+                taskMap.put("Score","None");
                 db.child("Admin/"+auth.getUid()+"/Signal/").updateChildren(taskMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        progressDialog.dismiss();
+                        //progressDialog.dismiss();
+                        text.setText("Processing...");
+
+                        //dialog.dismiss();
                     }
                 });
 
                 //   db.child(auth.getUid()).push().setValue("Profile");
-               /* db.child(auth.getUid()+"/Signals/"+date).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        count= (int) dataSnapshot.getChildrenCount();
-                        Map<String,Object> map = new HashMap<>();
-                        map.put(String.valueOf(count),time);
-                        db.child(auth.getUid()+"/Signals/"+date).updateChildren(map);
-                        success = true;
-                        progressDialog.dismiss();
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });*/
           //      Toast.makeText(MainActivity.this, taskSnapshot.getMetadata().getName(), Toast.LENGTH_SHORT).show();
             }
         });
 
+    }
+
+    boolean deleted;
+    public boolean deleteFile(String path){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://lubdub-1a71d.appspot.com");
+        StorageReference signal = storageRef.child(path);
+
+
+        signal.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                deleted = true;
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                deleted = false;
+            }
+        });
+        return deleted;
     }
 
     @Override
@@ -442,5 +510,87 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
         Intent i = new Intent(MainActivity.this,Profile.class);
         i.putExtra("Fetch",true);
         startActivity(i);
+    }
+
+    private class ProgressTask extends AsyncTask<String, Void, Boolean> {
+        private Dialog Dia;
+        private Context context;
+        private TextView msg;
+        private ProgressBar prog;
+
+        public ProgressTask(Context activity) {
+            context = activity;
+            this.Dia = new Dialog(context);
+            this.Dia.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            this.Dia.setCancelable(false);
+            this.Dia.setContentView(R.layout.dialog_layout);
+        }
+
+        /** progress dialog to show user that the backup is processing. */
+
+        /** application context. */
+
+        protected void onPreExecute() {
+
+            this.msg = this.Dia.findViewById(R.id.dia_text);
+            this.msg.setText("Plotting Signal...");
+            this.prog = this.Dia.findViewById(R.id.progress);
+            this.prog.setIndeterminate(true);
+
+            this.Dia.show();
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            this.Dia.dismiss();
+            graph.setVisibility(View.VISIBLE);
+            Upload();
+        }
+
+        protected Boolean doInBackground(final String... args) {
+            try{
+
+                WavFile wavFile = null;
+                /// graph.setVisibility(INVISIBLE);
+                GraphAxis();
+                try {
+                    // String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/testwave.wav";
+                    File mFile = new File(File_Path);
+                    try {
+                        wavFile = WavFile.openWavFile(mFile);
+                        //Toast.makeText(Main2Activity.this, String.valueOf(wavFile.getNumFrames()), Toast.LENGTH_SHORT).show();
+                    } catch (IOException | WavFile.WavFileException e) {
+                        e.printStackTrace();
+                    }
+                    int bufSize = (int) wavFile.getNumFrames();
+                    temp = wavFile.getDuration();
+                    // temp2 = bufSize/temp;
+                    temp2 = wavFile.getBlockAlign();
+                    DataBuffer = new float[bufSize];
+
+                    //addEntry(wavFile.readFrames());
+
+                    wavFile.readFrames(DataBuffer, bufSize);
+
+                    for (int j = 0; j < DataBuffer.length; j+=4) {
+                        //float value = buffer[j];
+                        addEntry(DataBuffer[j]);
+                    }
+
+                    wavFile.close();
+
+
+                } catch (IOException | WavFile.WavFileException e) {
+                    e.printStackTrace();
+                }
+
+                return true;
+            } catch (Exception e){
+
+                return false;
+            }
+        }
+
+
     }
 }

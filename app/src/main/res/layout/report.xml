@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/report_background">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Patient Report"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:id="@+id/report_header"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Name"
+        android:id="@+id/report_name"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_below="@+id/report_header"
+        />
+    <TextView
+        android:id="@+id/reportName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/report_name"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="130dp"
+        android:text="None"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="150dp"
+        android:textSize="12sp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="City"
+        android:id="@+id/report_city"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="30dp"
+        android:layout_marginStart="50dp"
+        android:layout_below="@+id/report_name"/>
+    <TextView
+        android:id="@+id/reportCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/report_city"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="130dp"
+        android:text="None"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="150dp"
+        android:textSize="12sp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Age"
+        android:id="@+id/report_age"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="30dp"
+        android:layout_marginStart="50dp"
+        android:layout_below="@+id/report_city"/>
+    <TextView
+        android:id="@+id/reportAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/report_age"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="130dp"
+        android:text="None"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="130dp"
+        android:textSize="12sp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Blood Group"
+        android:id="@+id/report_blood"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="30dp"
+        android:layout_marginStart="50dp"
+        android:layout_below="@+id/report_age"/>
+    <TextView
+        android:id="@+id/reportBlood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/report_blood"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="130dp"
+        android:text="None"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="150dp"
+        android:textSize="12sp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:id="@+id/report_medical_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:text="Medical History"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/report_blood"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/report_dia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/report_medical_header"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="15dp"
+        android:text="Diabetes"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginStart="50dp" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/chRepDiabetes"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignStart="@+id/reportBlood"
+        android:layout_alignTop="@+id/report_dia"
+        android:clickable="false"
+        android:layout_alignLeft="@+id/reportBlood" />
+
+    <TextView
+        android:id="@+id/report_hyp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/report_dia"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:text="Hyper Tension"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="12sp"
+        android:layout_marginStart="50dp" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/chRepHyper"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignStart="@+id/reportBlood"
+        android:layout_alignTop="@+id/report_hyp"
+        android:clickable="false"
+        android:layout_alignLeft="@+id/reportBlood" />
+
+    <TextView
+        android:id="@+id/report_heart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/report_hyp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:text="Heart Problems"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="12sp"
+        android:layout_marginStart="50dp" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/chRepHeart_problems"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignStart="@+id/reportBlood"
+        android:layout_alignTop="@+id/report_heart"
+        android:clickable="false"
+        android:layout_alignLeft="@+id/reportBlood" />
+
+    <TextView
+        android:id="@+id/report_choles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/report_heart"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:text="High Cholestrol"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="12sp"
+        android:layout_marginStart="50dp" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/chRepCholestrol"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignStart="@+id/reportBlood"
+        android:layout_alignTop="@+id/report_choles"
+        android:clickable="false"
+        tools:ignore="UnknownId"
+        android:layout_alignLeft="@+id/reportBlood" />
+
+    <TextView
+        android:id="@+id/report_smoke"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/report_choles"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:text="Smoker"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="12sp"
+        android:layout_marginStart="50dp" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/chRepSmoking"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignStart="@+id/reportBlood"
+        android:layout_alignTop="@+id/report_smoke"
+        android:clickable="false"
+        android:layout_alignLeft="@+id/reportBlood" />
+
+    <TextView
+        android:id="@+id/report_chest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/report_smoke"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:text="Chest Pain"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="12sp"
+        android:layout_marginStart="50dp" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/chRepChest_pain"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignStart="@+id/reportBlood"
+        android:layout_alignTop="@+id/report_chest"
+        android:clickable="false"
+        android:layout_alignLeft="@+id/reportBlood" />
+
+
+    <TextView
+        android:id="@+id/report_naus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/report_chest"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:text="Nausea"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="12sp"
+        android:layout_marginStart="50dp" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/chRepnausea"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignStart="@+id/reportBlood"
+        android:layout_alignTop="@+id/report_naus"
+        android:clickable="false"
+        android:layout_alignLeft="@+id/reportBlood" />
+
+    <TextView
+        android:id="@+id/report_sweat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/report_naus"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:text="Sweating"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="12sp"
+        android:layout_marginStart="50dp" />
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/chRepSweating"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignStart="@+id/reportBlood"
+        android:layout_alignTop="@+id/report_sweat"
+        android:clickable="false"
+        android:layout_alignLeft="@+id/textViewBlood" />
+
+    <TextView
+        android:id="@+id/vital_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:text="Vital Signs"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/report_sweat"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Heart Rate"
+        android:id="@+id/rep_Heart"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_below="@+id/vital_header"
+        />
+    <TextView
+        android:id="@+id/textHeart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rep_Heart"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="130dp"
+        android:text="None"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="150dp"
+        android:textSize="12sp"
+        android:textColor="#000"/>
+
+
+</RelativeLayout>

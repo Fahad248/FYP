@@ -3,16 +3,21 @@ package com.fyp_lubdub;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class Splash extends AppCompatActivity {
 
     private TextView txt;
+    RelativeLayout Rl;
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +37,8 @@ public class Splash extends AppCompatActivity {
         //scaleDown.setRepeatCount(ObjectAnimator.INFINITE);
         scaleDown.setRepeatCount(3);
         scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
+
+
 
         final Handler handler1 = new Handler();
         handler1.postDelayed(new Runnable() {
@@ -62,5 +69,20 @@ public class Splash extends AppCompatActivity {
             }
         }, 3500);
 
+       /* Rl = findViewById(R.id.splash);
+        Rl.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int availableHeight = Rl.getMeasuredHeight();
+                if(availableHeight>0) {
+                    Rl.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    SC(Rl);
+                    //save height here and do whatever you want with it
+                }
+            }
+        });*/
+
     }
+
+
 }

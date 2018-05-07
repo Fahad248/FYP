@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#264b8e"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     android:scrollbarAlwaysDrawVerticalTrack="true">
 
@@ -12,12 +12,11 @@
         android:id="@+id/cancel"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
+        android:layout_alignEnd="@+id/EMail"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
         android:src="@drawable/cancel_red"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="15dp"
-        android:layout_margin="15dp"/>
+        android:layout_alignRight="@+id/EMail" />
 
     <EditText
         android:layout_width="match_parent"

@@ -10,6 +10,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,10 +30,15 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth auth;
     private Dialog dialog;
     private boolean show;
+    private TextView text;
+    private ProgressBar Progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_login);
+
+        getSupportActionBar().hide();
         FirebaseApp.initializeApp(this);
 
         mail = findViewById(R.id.email);
@@ -44,6 +51,18 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog = new Dialog(Login.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.dialog_layout);
+
+                text = dialog.findViewById(R.id.dia_text);
+                text.setText("Signing in...");
+                Progress = dialog.findViewById(R.id.progress);
+
+                Progress.setIndeterminate(true);
+                dialog.show();
+
                 String Mail = mail.getText().toString(), Pass = pass.getText().toString();
                 if (Mail=="" || Pass==""){
                     Toast.makeText(Login.this, "Empty Fields!!!", Toast.LENGTH_LONG).show();
@@ -60,8 +79,10 @@ public class Login extends AppCompatActivity {
                                         Intent i = new Intent(Login.this,Profile.class);
                                         startActivity(i);
                                         finish();
+                                        dialog.dismiss();
                                     }else{
                                         Toast.makeText(Login.this, "Authentication Error!!!", Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
                                     }
 
                                 }

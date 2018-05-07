@@ -9,7 +9,7 @@
 
     <com.github.mikephil.charting.charts.LineChart
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="250dp"
         android:layout_centerInParent="true"
         android:id="@+id/bar"
         android:visibility="invisible"
@@ -17,39 +17,54 @@
 
     </com.github.mikephil.charting.charts.LineChart>
 
+
+
     <Button
-        android:id="@+id/start"
+        android:id="@+id/background"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:background="@drawable/microphone_green"
+        android:background="@drawable/round_green"
         android:layout_below="@+id/bar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="27dp" />
 
     <Button
-        android:id="@+id/OE"
+        android:id="@+id/start"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@drawable/blue_folder"
+        android:background="@drawable/mic"
+        android:layout_below="@+id/bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp" />
 
+    <Button
+        android:id="@+id/OE"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/blue_folder"
         android:layout_above="@+id/bar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="11dp"
-        android:layout_marginEnd="11dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        />
 
     <TextView
         android:id="@+id/file_name"
-        android:layout_width="181dp"
+        android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_alignBaseline="@+id/OE"
         android:layout_alignParentStart="true"
         android:layout_marginStart="86dp"
         android:maxLines="1"
-        android:textSize="18sp"
         android:text="    "
         android:textAlignment="center"
-        android:textColor="#000" />
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="86dp" />
+
+
 
 </RelativeLayout>

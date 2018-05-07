@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Uploading..."
+        android:id="@+id/dia_text"
+        android:textSize="18sp"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:layout_margin="15dp"/>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/dia_text"
+        tools:ignore="UnknownId"
+        android:layout_margin="10dp"
+        android:progressBackgroundTint="@color/colorAccent"
+        android:progress="0"/>
+
+</RelativeLayout>
