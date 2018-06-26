@@ -32,7 +32,8 @@
                 android:layout_marginRight="10dp"
                 android:hint="Search"
                 android:gravity="center"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:visibility="invisible"/>
         </RelativeLayout>
 
     </LinearLayout>

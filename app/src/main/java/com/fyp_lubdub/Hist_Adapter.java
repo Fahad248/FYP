@@ -39,6 +39,8 @@ public class Hist_Adapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
+
+
         final String childText = (String) getChild(groupPosition, childPosition);
         final String score = (String )this.Score.get(this.Date.get(groupPosition)).get(childPosition);
 

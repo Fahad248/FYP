@@ -6,8 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Profile"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/colorPrimaryDark"
+    >
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:titleTextColor="@android:color/white"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,7 +30,8 @@
         android:layout_toRightOf="@+id/gap"
         android:gravity="center"
         android:layout_alignParentRight="true"
-        android:layout_above="@+id/layout"/>
+        android:layout_above="@+id/layout"
+        android:layout_below="@id/toolbar"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +40,8 @@
         android:layout_centerHorizontal= "true"
         android:layout_above="@+id/RL"
         tools:ignore="UnknownId"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginTop="50dp"
+        android:layout_below="@id/toolbar"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -46,7 +58,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/layout"
         android:layout_toLeftOf="@+id/gap"
-
+        android:layout_below="@id/toolbar"
         android:layout_toStartOf="@+id/gap"
         android:text="History"
         android:gravity="center"

@@ -125,7 +125,7 @@ public class Login extends AppCompatActivity {
                                         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
                                      //   db.child(auth.getUid()).push().setValue("Profile");
                                         db.child(auth.getUid()+"/Profile/").setValue(new Credentials(name));
-                                        db.child(auth.getUid()+"/Signals/").setValue(new Credentials(name));
+                                     //   db.child(auth.getUid()+"/Signals/None").setValue('1');
 
                                     }
                                     else {

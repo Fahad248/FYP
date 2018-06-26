@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff">
+
+    <TextView
+        android:id="@+id/vitals_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:text="Vital Signs"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Normality"
+        android:id="@+id/vital_Normal"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="80dp"
+        android:layout_marginStart="80dp"
+        android:layout_below="@+id/vitals_header"
+        />
+    <TextView
+        android:id="@+id/textNormal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/vital_Normal"
+        android:text="None"
+        android:layout_toRightOf="@+id/vitals_header"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:textSize="14sp"
+        android:textColor="#000"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Heart Rate"
+        android:id="@+id/rep_Heart"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="80dp"
+        android:layout_marginStart="80dp"
+        android:layout_below="@+id/vital_Normal"
+        />
+    <TextView
+        android:id="@+id/textHeart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rep_Heart"
+        android:text="None"
+        android:layout_toRightOf="@+id/vitals_header"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"
+        android:textSize="14sp"
+        android:textColor="#000"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Systolic"
+        android:id="@+id/rep_Systolic"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="80dp"
+        android:layout_marginStart="80dp"
+        android:layout_below="@+id/rep_Heart"
+        />
+    <TextView
+        android:id="@+id/textSystolic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rep_Systolic"
+        android:text="None"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/vitals_header"
+        android:textSize="14sp"
+        android:textColor="#000"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Diastolic"
+        android:id="@+id/rep_Diastole"
+        android:textSize="14sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="80dp"
+        android:layout_marginStart="80dp"
+        android:layout_below="@+id/rep_Systolic"
+        />
+    <TextView
+        android:id="@+id/textDiastole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rep_Diastole"
+        android:text="None"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/vitals_header"
+        android:textSize="14sp"
+        android:textColor="#000"
+        android:layout_marginStart="50dp"
+        android:layout_marginLeft="50dp"/>
+
+    <Button
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/sig_view"
+        android:layout_below="@id/rep_Diastole"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="      View Signal      "
+        android:background="@color/colorPrimary"
+        android:textColor="#fff"/>
+
+    <Button
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/pdf"
+        android:layout_below="@id/sig_view"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="0dp"
+        android:layout_centerHorizontal="true"
+        android:text="  Generate PDF Report  "
+        android:background="#FFFF4235"
+        android:textColor="#fff"/>
+
+
+</RelativeLayout>

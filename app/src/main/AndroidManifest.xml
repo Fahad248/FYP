@@ -22,7 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Login" />
-        <activity android:name=".Profile"></activity>
+        <activity android:name=".Profile"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".PlotPlay" />
     </application>
 
 </manifest>

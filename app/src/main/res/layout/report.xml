@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/report_background">
+    android:background="@drawable/report_background"
+    android:id="@+id/report_layout">
 
     <TextView
         android:layout_width="match_parent"
@@ -143,8 +144,8 @@
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/chRepDiabetes"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
         android:layout_alignStart="@+id/reportBlood"
         android:layout_alignTop="@+id/report_dia"
         android:clickable="false"
@@ -164,8 +165,8 @@
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/chRepHyper"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
         android:layout_alignStart="@+id/reportBlood"
         android:layout_alignTop="@+id/report_hyp"
         android:clickable="false"
@@ -185,8 +186,8 @@
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/chRepHeart_problems"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
         android:layout_alignStart="@+id/reportBlood"
         android:layout_alignTop="@+id/report_heart"
         android:clickable="false"
@@ -206,8 +207,8 @@
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/chRepCholestrol"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
         android:layout_alignStart="@+id/reportBlood"
         android:layout_alignTop="@+id/report_choles"
         android:clickable="false"
@@ -228,8 +229,8 @@
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/chRepSmoking"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
         android:layout_alignStart="@+id/reportBlood"
         android:layout_alignTop="@+id/report_smoke"
         android:clickable="false"
@@ -249,8 +250,8 @@
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/chRepChest_pain"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
         android:layout_alignStart="@+id/reportBlood"
         android:layout_alignTop="@+id/report_chest"
         android:clickable="false"
@@ -271,8 +272,8 @@
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/chRepnausea"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
         android:layout_alignStart="@+id/reportBlood"
         android:layout_alignTop="@+id/report_naus"
         android:clickable="false"
@@ -292,8 +293,8 @@
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/chRepSweating"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
         android:layout_alignStart="@+id/reportBlood"
         android:layout_alignTop="@+id/report_sweat"
         android:clickable="false"
@@ -318,8 +319,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Heart Rate"
-        android:id="@+id/rep_Heart"
+        android:text="Normal"
+        android:id="@+id/rep_Normal"
         android:textSize="12sp"
         android:textColor="@color/colorPrimaryDark"
         android:layout_marginLeft="50dp"
@@ -327,10 +328,85 @@
         android:layout_below="@+id/vital_header"
         />
     <TextView
-        android:id="@+id/textHeart"
+        android:id="@+id/textrepNormal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rep_Normal"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="130dp"
+        android:text="None"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="150dp"
+        android:textSize="12sp"
+        android:textColor="#000"/>
+
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:text="Heart Rate"
+    android:id="@+id/rep_Heart"
+    android:textSize="12sp"
+    android:textColor="@color/colorPrimaryDark"
+    android:layout_marginLeft="50dp"
+    android:layout_marginStart="50dp"
+    android:layout_below="@+id/rep_Normal"
+    />
+    <TextView
+        android:id="@+id/textrepHeart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/rep_Heart"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="130dp"
+        android:text="None"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="150dp"
+        android:textSize="12sp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Systolic"
+        android:id="@+id/rep_Systolic"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_below="@+id/rep_Heart"
+        />
+    <TextView
+        android:id="@+id/textrepSystolic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rep_Systolic"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="130dp"
+        android:text="None"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="150dp"
+        android:textSize="12sp"
+        android:textColor="#000"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Diastolic"
+        android:id="@+id/rep_Diastole"
+        android:textSize="12sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_below="@+id/rep_Systolic"
+        />
+    <TextView
+        android:id="@+id/textrepDiastole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rep_Diastole"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="130dp"
         android:text="None"

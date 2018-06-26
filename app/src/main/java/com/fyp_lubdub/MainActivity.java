@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
                                 }
                                 else if (score.equals("1")){
                                     dialog.dismiss();
+                                    db.child("Admin/" + auth.getUid()).removeValue();
                                     Toast.makeText(MainActivity.this, "Signal OK !", Toast.LENGTH_LONG).show();
                                 }
                             }
@@ -451,6 +452,8 @@ public class MainActivity extends AppCompatActivity implements Interface_MainAct
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                // Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                File temp = new File(File_Path);
+                temp.delete();
 
                 DateFormat df = new SimpleDateFormat("h:mm a");
                 final String time = df.format(Calendar.getInstance().getTime());
